@@ -208,11 +208,33 @@ class DockerRuntime(ActionExecutionClient):
     @staticmethod
     @lru_cache(maxsize=1)
     def _init_docker_client() -> docker.DockerClient:
+        docker_host_url = os.environ.get('DOCKER_HOST')
         try:
-            return docker.from_env()
+            if docker_host_url:
+                logger.info(
+                    f'DOCKER_HOST is set to: {docker_host_url}. Initializing DockerClient with base_url.'
+                )
+                client = docker.DockerClient(base_url=docker_host_url)
+                logger.info(
+                    f'Successfully initialized DockerClient with DOCKER_HOST: {docker_host_url}'
+                )
+                return client
+            else:
+                logger.info('DOCKER_HOST is not set. Attempting docker.from_env().')
+                client = docker.from_env()
+                logger.info(
+                    'Successfully initialized DockerClient with docker.from_env().'
+                )
+                return client
         except Exception as ex:
+            current_docker_host = os.environ.get('DOCKER_HOST', 'Not set')
+            log_message = (
+                f'Launch docker client failed. DOCKER_HOST: {current_docker_host}. '
+                'Please ensure Docker is running or DOCKER_HOST is correctly set for Podman.'
+            )
+            logger.error(log_message)
             logger.error(
-                'Launch docker client failed. Please make sure you have installed docker and started docker desktop/daemon.',
+                f'Exception type: {type(ex).__name__}, Exception message: {str(ex)}'
             )
             raise ex
 
