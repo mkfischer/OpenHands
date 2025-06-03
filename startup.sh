@@ -15,7 +15,7 @@ if [ -n "$PODMAN_SOCKET_PATH" ]; then
     # Depending on the system, it might be a different type of file, but for macOS/Linux VM, it's typically a socket.
   fi
 
-  EXTRA_PODMAN_OPTS+=("-v" "$HOST_SOCK_PATH:/var/run/docker.sock:z")
+  EXTRA_PODMAN_OPTS+=("-v" "$HOST_SOCK_PATH:/var/run/docker.sock")
   EXTRA_PODMAN_OPTS+=("-e" "DOCKER_HOST=unix:///var/run/docker.sock")
   echo "INFO: Added Podman socket volume mount and DOCKER_HOST=unix:///var/run/docker.sock environment variable for the container."
 else
