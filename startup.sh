@@ -16,7 +16,7 @@ if [ -n "$PODMAN_SOCKET_PATH" ]; then
   fi
 
   EXTRA_PODMAN_OPTS+=("-v" "$HOST_SOCK_PATH:/var/run/docker.sock")
-  EXTRA_PODMAN_OPTS+=("-e" "DOCKER_HOST=/var/run/docker.sock")
+  EXTRA_PODMAN_OPTS+=("-e" "DOCKER_HOST=unix:///var/run/docker.sock")
   echo "INFO: Added Podman socket volume mount and DOCKER_HOST=unix:///var/run/docker.sock environment variable for the container."
 else
   echo "INFO: PODMAN_SOCKET_PATH is not set. Assuming a standard Docker environment where DOCKER_HOST might be inherited or the default socket is used."

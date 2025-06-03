@@ -214,9 +214,6 @@ class DockerRuntime(ActionExecutionClient):
                 logger.info(
                     f'DOCKER_HOST is set to: {docker_host_url}.'
                 )
-                # If DOCKER_HOST doesn't have a scheme, prepend unix://
-                if not docker_host_url.startswith(('unix://', 'tcp://', 'http://', 'https://')):
-                    docker_host_url = f'unix://{docker_host_url}'
                 client = docker.DockerClient(base_url=docker_host_url)
                 logger.info(
                     f'Successfully initialized DockerClient with DOCKER_HOST: {docker_host_url}'
